@@ -43,7 +43,7 @@ try {
     }
 
     Write-Host 'Installation completed.'
-    Write-Host 'Configure CopyQ as described in README.md.'
+    Write-Host 'LocalBridge and CopyQ setup completed.'
 }
 finally {
     Remove-Item -LiteralPath $temp -Recurse -Force `

@@ -1,4 +1,4 @@
-﻿# LocalBridge
+# LocalBridge
 
 **Русский** | [English](README.en.md)
 
@@ -37,23 +37,21 @@ LocalBridge не требует OpenAI API, расширения браузер�
 
 ## Установка
 
-Скачайте или клонируйте репозиторий.
+Сначала установите [CopyQ](https://hluk.github.io/CopyQ/) и запустите его.
 
-В Windows PowerShell из каталога проекта выполните:
+Затем откройте Windows PowerShell и выполните:
+
+    irm https://raw.githubusercontent.com/limka1200/LocalBridge/main/bootstrap.ps1 | iex
+
+Установщик скачает LocalBridge, проверит наличие CopyQ, скопирует файлы в `%LOCALAPPDATA%\LocalBridge`, зарегистрирует автоматическую команду CopyQ и запустит LocalBridge.
+
+Ручная настройка команды CopyQ не требуется.
+
+Если каталог `%LOCALAPPDATA%\LocalBridge` уже существует, установщик остановится без перезаписи. Обновление существующей установки пока не реализовано.
+
+Для установки из клонированного репозитория:
 
     powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1
-
-Установщик скопирует файлы в:
-
-    %LOCALAPPDATA%\LocalBridge
-
-Если каталог установки уже существует, установщик откажется от перезаписи.
-
-Затем откройте CopyQ, создайте команду `Local PowerShell Bridge`, включите её автоматическое выполнение и вставьте содержимое файла [copyq/LocalBridge.js](copyq/LocalBridge.js) в редактор команды.
-
-Запустите LocalBridge:
-
-    powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$env:LOCALAPPDATA\LocalBridge\LocalBridgeStart.ps1"
 
 ## Использование
 
@@ -83,7 +81,7 @@ LocalBridge выполняет PowerShell-код с правами текуще�
 
 **Experimental.**
 
-Проект разработан и проверен на одной рабочей установке Windows. Установка на чистой системе и совместимость с другими конфигурациями пока не подтверждены.
+Работа LocalBridge подтверждена на основной машине и независимо на ноутбуке с Windows 11. Автоматическая установка с настройкой CopyQ находится на этапе проверки.
 
 Предложения, сообщения об ошибках и pull request приветствуются.
 

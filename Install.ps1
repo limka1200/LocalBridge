@@ -1,4 +1,4 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param()
 
 $ErrorActionPreference = 'Stop'
@@ -14,11 +14,18 @@ $files = @(
     'bin\RegisterTray.ps1',
     'bin\TrayExceptionDiagnostics.ps1',
     'bin\TrayWatcher.ps1',
-    'config\paths.ps1'
+    'config\paths.ps1',
+    'RegisterCopyQ.ps1',
+    'copyq\LocalBridge.js'
 )
 
 if (Test-Path $target) {
     throw "LocalBridge already exists at $target. Installation cancelled."
+}
+# Validate CopyQ before copying application files.
+& (Join-Path $source 'RegisterCopyQ.ps1') -CheckOnly
+if (-not $?) {
+    throw 'CopyQ prerequisite check failed'
 }
 
 foreach ($name in $files) {
@@ -67,5 +74,23 @@ catch {
 }
 
 Write-Host "LocalBridge installed at: $target"
-Write-Host 'Configure the CopyQ command as described in README.md.'
-Write-Host 'Installation does not start the daemon automatically.'
+
+Write-Host 'Registering CopyQ command...'
+& powershell.exe -NoProfile -NonInteractive `
+    -ExecutionPolicy Bypass `
+    -File (Join-Path $target 'RegisterCopyQ.ps1')
+
+if ($LASTEXITCODE -ne 0) {
+    throw 'CopyQ registration failed; installation needs attention'
+}
+
+Write-Host 'Starting LocalBridge...'
+& powershell.exe -NoProfile -NonInteractive `
+    -ExecutionPolicy Bypass `
+    -File (Join-Path $target 'LocalBridgeStart.ps1')
+
+if ($LASTEXITCODE -ne 0) {
+    throw 'LocalBridge startup failed'
+}
+
+Write-Host 'LocalBridge setup completed.'
