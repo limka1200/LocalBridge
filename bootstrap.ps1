@@ -35,7 +35,12 @@ try {
 
     Write-Host 'Installing LocalBridge...'
 
-    & $installer
+    & powershell.exe -NoProfile -NonInteractive `
+        -ExecutionPolicy Bypass -File $installer
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Install.ps1 failed with exit code $LASTEXITCODE"
+    }
 
     Write-Host 'Installation completed.'
     Write-Host 'Configure CopyQ as described in README.md.'
