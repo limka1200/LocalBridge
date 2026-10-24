@@ -5,7 +5,9 @@
 A lightweight, clipboard-driven bridge between ChatGPT Web
 and a persistent local Windows PowerShell session.
 
-No OpenAI API key, browser extension, or custom chat UI required.
+Automatic execution of copied commands is handled by [CopyQ](https://hluk.github.io/CopyQ/), a free clipboard manager.
+
+LocalBridge requires no OpenAI API key, browser extension, or custom chat UI.
 
 ## How it works
 
