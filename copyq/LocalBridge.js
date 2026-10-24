@@ -1,10 +1,10 @@
-﻿copyq:
+copyq:
 var input = str(clipboard()).replace(/\r\n/g, '\n');
 
 if (input.indexOf('LOCAL_EXEC_V1\n') !== 0)
     abort();
 
-var script = str(getEnv('LOCALAPPDATA')).replace(/\\/g, '/') +
+var script = str(env('LOCALAPPDATA')).replace(/\\/g, '/') +
     '/LocalBridge/bin/bridge.ps1';
 
 var result = execute(
