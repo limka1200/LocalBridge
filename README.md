@@ -37,21 +37,33 @@ LocalBridge не требует OpenAI API, расширения браузер�
 
 ## Установка
 
-Сначала установите [CopyQ](https://hluk.github.io/CopyQ/) и запустите его.
+Для обоих способов установки требуется [CopyQ](https://hluk.github.io/CopyQ/). Установите и запустите его заранее.
 
-Затем откройте Windows PowerShell и выполните:
+### Быстрая установка (рекомендуется)
 
-    irm https://raw.githubusercontent.com/limka1200/LocalBridge/main/bootstrap.ps1 | iex
+Откройте Windows PowerShell и выполните:
 
-Установщик скачает LocalBridge, проверит наличие CopyQ, скопирует файлы в `%LOCALAPPDATA%\LocalBridge`, зарегистрирует автоматическую команду CopyQ и запустит LocalBridge.
+```powershell
+irm https://raw.githubusercontent.com/limka1200/LocalBridge/main/bootstrap.ps1 | iex
+```
 
-Ручная настройка команды CopyQ не требуется.
+Скрипт скачает LocalBridge, зарегистрирует автоматическую команду CopyQ и запустит мост.
 
-Если каталог `%LOCALAPPDATA%\LocalBridge` уже существует, установщик остановится без перезаписи. Обновление существующей установки пока не реализовано.
+### Установка из исходников
 
-Для установки из клонированного репозитория:
+Скачайте или клонируйте репозиторий, откройте Windows PowerShell в каталоге проекта и выполните:
 
-    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1
+```
+
+Установщик выполнит ту же настройку, используя локальные файлы проекта.
+
+### Расположение файлов и ограничения
+
+LocalBridge устанавливается в `%LOCALAPPDATA%\LocalBridge`.
+
+Если этот каталог уже существует, установка остановится без перезаписи файлов. Автоматическое обновление существующей установки пока не реализовано.
 
 ## Использование
 
