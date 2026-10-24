@@ -79,14 +79,37 @@ if (matches.length === 1) {
 }
 "@
 
-# CopyQ supports script execution from standard input.
-$output = & $copyq eval -- $script 2>&1
-$exitCode = $LASTEXITCODE
+# CopyQ on Windows may not return a usable exit code
+# when its output is captured into a PowerShell variable.
+& $copyq eval -- $script | Write-Output
+$invokeCode = $LASTEXITCODE
 
-$output | ForEach-Object { $_.ToString() }
+if ($invokeCode -ne 0) {
+    throw "CopyQ eval failed: $invokeCode"
+}
 
-if ($exitCode -ne 0) {
-    throw "CopyQ registration failed: exit code $exitCode"
+# Verify actual configuration rather than trusting output.
+$verify = @"
+var list = commands();
+var name = $nameJson;
+var content = $cmdJson;
+var matches = list.filter(function(c) {
+    return c.name === name;
+});
+if (matches.length !== 1 ||
+    matches[0].cmd !== content ||
+    matches[0].automatic !== true ||
+    matches[0].enable === false) {
+    throw new Error('LocalBridge CopyQ configuration verification failed');
+}
+print('VERIFIED');
+"@
+
+& $copyq eval -- $verify | Write-Output
+$verifyCode = $LASTEXITCODE
+
+if ($verifyCode -ne 0) {
+    throw "CopyQ verification failed: $verifyCode"
 }
 
 "REGISTRATION_COMMAND_COMPLETED"
