@@ -1,89 +1,90 @@
 ﻿# LocalBridge
 
-A lightweight, clipboard-driven bridge between ChatGPT Web
-and a persistent local Windows PowerShell session.
+**Русский** | [English](README.en.md)
 
-No OpenAI API key, browser extension, or custom chat UI required.
+LocalBridge — лёгкий мост между веб-версией ChatGPT и локальным компьютером под Windows, использующий буфер обмена для передачи команд и результатов.
 
-## How it works
+Не требует OpenAI API, расширения браузера или отдельного интерфейса чата.
 
-1. ChatGPT generates a command beginning with `LOCAL_EXEC_V1`.
-2. The user copies the command manually.
-3. CopyQ detects the clipboard change.
-4. LocalBridge executes the command in a persistent PowerShell runspace.
-5. The result is returned to the clipboard.
+## Как это работает
 
-LocalBridge uses a named pipe for communication between
-the client and its background daemon.
+1. ChatGPT формирует команду с заголовком `LOCAL_EXEC_V1`.
+2. Пользователь нажимает кнопку копирования.
+3. CopyQ обнаруживает изменение буфера обмена.
+4. LocalBridge выполняет команду в постоянной PowerShell-сессии.
+5. Результат выполнения возвращается в буфер обмена.
 
-## Requirements
+Для связи между клиентом и фоновым процессом используется Named Pipe.
 
-- Windows
-- Windows PowerShell 5.1
-- CopyQ
+## Возможности
 
-## Installation
+- Выполнение PowerShell-команд непосредственно из обычного чата.
+- Постоянный PowerShell Runspace с сохранением состояния.
+- Управление файлами, процессами и другими возможностями Windows.
+- Взаимодействие через Named Pipe.
+- Значок в системном трее с индикацией состояния.
+- Раздельное отображение успешного, частичного и ошибочного выполнения.
+- Диагностика жизненного цикла процесса трея.
+- Перезапуск исполнительной сессии и демона.
 
-Download or clone this repository.
+## Требования
 
-From Windows PowerShell, run:
+- Windows.
+- Windows PowerShell 5.1.
+- [CopyQ](https://hluk.github.io/CopyQ/).
+
+## Установка
+
+Скачайте или клонируйте репозиторий.
+
+В Windows PowerShell из каталога проекта выполните:
 
     powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1
 
-The installer copies the application to:
+Установщик скопирует файлы в:
 
     %LOCALAPPDATA%\LocalBridge
 
-It refuses to overwrite an existing installation.
+Если каталог установки уже существует, установщик откажется от перезаписи.
 
-Next, open CopyQ, create a new command named
-`Local PowerShell Bridge`, enable automatic execution,
-and paste the contents of `copyq/LocalBridge.js`
-into its command editor.
+Затем откройте CopyQ, создайте команду `Local PowerShell Bridge`, включите её автоматическое выполнение и вставьте содержимое файла [copyq/LocalBridge.js](copyq/LocalBridge.js) в редактор команды.
 
-Start LocalBridge:
+Запустите LocalBridge:
 
     powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$env:LOCALAPPDATA\LocalBridge\LocalBridgeStart.ps1"
 
-## Command format
+## Использование
 
-Every execution request begins with the protocol marker
-`LOCAL_EXEC_V1` on the first line, followed by PowerShell code.
+Передайте модели [контракт протокола LocalBridge](docs/PROTOCOL.ru.md), чтобы она знала правила формирования исполняемых команд.
 
-For example, the code after the marker may be:
+Пример копируемого запроса:
 
+    LOCAL_EXEC_V1
     Get-Date
     Get-Location
 
-The command output is placed back into the clipboard.
+После копирования запроса CopyQ передаст его LocalBridge, а результат выполнения попадёт обратно в буфер обмена.
 
-## Features
+### Контракт взаимодействия
 
-- Persistent PowerShell runspace
-- Named-pipe client/server communication
-- Tray status indicator
-- Execution error reporting
-- Partial-error indication
-- Tray process lifecycle diagnostics
-- Manual restart and reload operations
+**[Прочитать контракт LOCAL_EXEC_V1](docs/PROTOCOL.ru.md)**
 
-## Security
+Контракт описывает правила для модели, операции `EXEC`, `STATUS`, `INFO`, `RESTART`, `RELOAD`, форматы ответов и ограничения.
 
-LocalBridge executes PowerShell code with the permissions
-of the current Windows user.
+## Безопасность
 
-Only copy LocalBridge execution requests when you trust
-their contents and intended effects.
+LocalBridge выполняет PowerShell-код с правами текущего пользователя Windows.
 
-The clipboard is not a security boundary.
+Копируйте исполняемые запросы только тогда, когда понимаете их назначение и доверяете содержимому. Буфер обмена не является границей безопасности.
 
-## Project status
+## Состояние проекта
 
-Experimental. Developed and tested on a single Windows
-installation. Clean-machine installation and compatibility
-testing are still pending.
+**Experimental.**
 
-## License
+Проект разработан и проверен на одной рабочей установке Windows. Установка на чистой системе и совместимость с другими конфигурациями пока не подтверждены.
 
-MIT. See [LICENSE](LICENSE).
+Предложения, сообщения об ошибках и pull request приветствуются.
 
+## Лицензия
+
+MIT. См. [LICENSE](LICENSE).
