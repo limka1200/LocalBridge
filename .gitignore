@@ -1,0 +1,10 @@
+﻿*.log
+*.tmp
+*.bak
+*.before-*
+status.json
+backup/
+backups/
+.vscode/
+.idea/
+.DS_Store
