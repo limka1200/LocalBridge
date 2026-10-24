@@ -80,7 +80,7 @@ if (matches.length === 1) {
 "@
 
 # CopyQ supports script execution from standard input.
-$output = $script | & $copyq eval - 2>&1
+$output = & $copyq eval -- $script 2>&1
 $exitCode = $LASTEXITCODE
 
 $output | ForEach-Object { $_.ToString() }
