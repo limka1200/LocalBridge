@@ -1,5 +1,5 @@
 copyq:
-var input = str(clipboard()).replace(/\r\n/g, '\n');
+var input = str(clipboard()).replace(/\r\n/g, '\n').replace(/^(?:\n)+/, '');
 
 if (input.indexOf('LOCAL_EXEC_V1\n') !== 0)
     abort();
